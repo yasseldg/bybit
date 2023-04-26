@@ -3,11 +3,23 @@ package constants
 type Symbol string
 
 const (
-	Symbol_BTCUSDT = Symbol("BTCUSDT")
-	Symbol_ETHUSDT = Symbol("ETHUSDT")
+	Symbol_BTCUSDT   = Symbol("BTCUSDT")
+	Symbol_ETHUSDT   = Symbol("ETHUSDT")
+	Symbol_XRPUSDT   = Symbol("XRPUSDT")
+	Symbol_ADAUSDT   = Symbol("ADAUSDT")
+	Symbol_LTCUSDT   = Symbol("LTCUSDT")
+	Symbol_SOLUSDT   = Symbol("SOLUSDT")
+	Symbol_MATICUSDT = Symbol("MATICUSDT")
+	Symbol_DOGEUSDT  = Symbol("DOGEUSDT")
+	Symbol_BNBUSDT   = Symbol("BNBUSDT")
+	Symbol_AVAXUSDT  = Symbol("AVAXUSDT")
 
-	Symbol_BTCUSD = Symbol("BTCUSD")
-	Symbol_ETHUSD = Symbol("ETHUSD")
+	Symbol_BTCUSD  = Symbol("BTCUSD")
+	Symbol_ETHUSD  = Symbol("ETHUSD")
+	Symbol_XRPUSD  = Symbol("XRPUSD")
+	Symbol_ADAUSD  = Symbol("ADAUSD")
+	Symbol_LTCUSD  = Symbol("LTCUSD")
+	Symbol_AVAXUSD = Symbol("AVAXUSD")
 )
 
 type Interval string
