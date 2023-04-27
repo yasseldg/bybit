@@ -74,14 +74,6 @@ func NewParams() map[string]string {
 	return make(map[string]string)
 }
 
-func ToJson(v interface{}) (string, error) {
-	result, err := json.Marshal(v)
-	if err != nil {
-		return "", err
-	}
-	return string(result), nil
-}
-
 func powerf(x float64, n int) float64 {
 	ans := 1.0
 	for n != 0 {

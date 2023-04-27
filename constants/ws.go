@@ -30,8 +30,8 @@ const (
 	WsOpAuth            = "auth"
 	WsOpUnsubscribe     = "unsubscribe"
 	WsOpSubscribe       = "subscribe"
-	PingMessage         = "ping"
-	PongMessage         = "pong"
+	WsOpPing            = "ping"
+	WsOpPong            = "pong"
 	PingIntervalSecond  = 10
 	TimerIntervalSecond = 2
 )

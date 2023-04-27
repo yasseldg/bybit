@@ -97,7 +97,7 @@ func (wsc *WsClient) Connect() {
 }
 
 func (wsc *WsClient) SendMessage(msg string) {
-	wsc.BaseWsClient.Send(msg)
+	wsc.BaseWsClient.Send(msg, false)
 }
 
 func (wsc *WsClient) SendMessageByType(req wsRequest.Base) {

@@ -12,6 +12,7 @@ import (
 	"github.com/yasseldg/bybit/ws/model"
 	"github.com/yasseldg/bybit/ws/model/wsRequest"
 
+	"github.com/yasseldg/simplego/sJson"
 	"github.com/yasseldg/simplego/sLog"
 
 	"github.com/gorilla/websocket"
@@ -118,30 +119,29 @@ func (p *BaseWsClient) ExecuterPing() {
 }
 
 func (p *BaseWsClient) ping() {
-	p.Send(constants.PingMessage)
+	json, _ := sJson.ToJson(wsRequest.Base{Op: constants.WsOpPing})
+	p.Send(json, true)
 }
 
 func (p *BaseWsClient) SendByType(req wsRequest.Base) {
-	json, _ := utils.ToJson(req)
-	p.Send(json)
+	json, _ := sJson.ToJson(req)
+	p.Send(json, false)
 }
 
-func (p *BaseWsClient) Send(data string) {
+func (p *BaseWsClient) Send(data string, debug bool) {
 	if p.WebSocketClient == nil {
 		sLog.Error("WebSocket sent error: no connection available")
 		return
 	}
 
-	messageType := websocket.PingMessage
-	if data == constants.PingMessage {
+	if debug {
 		sLog.Debug("WebSocket sendMessage: %s", data)
 	} else {
 		sLog.Info("WebSocket sendMessage: %s", data)
-		messageType = websocket.TextMessage
 	}
 
 	p.SendMutex.Lock()
-	err := p.WebSocketClient.WriteMessage(messageType, []byte(data))
+	err := p.WebSocketClient.WriteMessage(websocket.TextMessage, []byte(data))
 	p.SendMutex.Unlock()
 	if err != nil {
 		sLog.Error("WebSocket sent error: data=%s, error=%s", data, err)
@@ -226,15 +226,15 @@ func (p *BaseWsClient) readLoop() {
 		}
 
 		v, e := jsonMap["op"]
-		if e && v.(string) == constants.PongMessage {
-			sLog.Debug("WebSocket Keep connected")
+		if e && v.(string) == constants.WsOpPong {
+			sLog.Debug("WebSocket keep connected %s", constants.WsOpPong)
 			continue
 		}
 
-		if e && v.(string) == constants.PingMessage {
+		if e && v.(string) == constants.WsOpPing {
 			v, e := jsonMap["success"]
 			if e && v.(bool) {
-				sLog.Debug("WebSocket Keep connected")
+				sLog.Debug("WebSocket keep connected %s", constants.WsOpPing)
 				continue
 			}
 		}
