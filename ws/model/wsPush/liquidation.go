@@ -2,7 +2,7 @@ package wsPush
 
 type LiquidationResp struct {
 	Base `json:",inline"`
-	Data Liquidations `json:"data"`
+	Data Liquidation `json:"data"`
 }
 
 type Liquidation struct {
@@ -12,7 +12,6 @@ type Liquidation struct {
 	Size       string `json:"size"`
 	Price      string `json:"price"`
 }
-type Liquidations []Liquidation
 
 // Parameter	Type	Comments
 // topic	string	Topic name

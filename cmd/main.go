@@ -6,9 +6,9 @@ import (
 
 	"github.com/yasseldg/bybit"
 	"github.com/yasseldg/bybit/constants"
-	"github.com/yasseldg/bybit/utils"
 	"github.com/yasseldg/bybit/ws/model/wsPush"
 
+	"github.com/yasseldg/simplego/sJson"
 	"github.com/yasseldg/simplego/sLog"
 )
 
@@ -17,7 +17,7 @@ func main() {
 	sLog.Info("Cmd Main \n\n")
 
 	// web socket
-	// wssLinear()
+	wssLinear() //  comment for test Inverse
 	wssInverse()
 
 	fmt.Println()
@@ -60,7 +60,7 @@ func wssInverse() {
 
 	wsc := bybit.WscPublicInverse()
 
-	uFunc_1 := wsc.Subscribe(listCandle, constants.GetTopicKline(constants.Symbol_BTCUSD, constants.Interval_1m))
+	uFunc_1 := wsc.Subscribe(listCandle, constants.GetTopicKline(constants.Symbol_LTCUSD, constants.Interval_1m))
 	defer uFunc_1()
 
 	uFunc_5 := wsc.SubscribeKline(listCandle, constants.Symbol_ETHUSD, constants.Interval_5m)
@@ -90,8 +90,11 @@ func wssInverse() {
 
 func listCandle(msg string) {
 	var pushObj wsPush.CandleResp
-
-	utils.GetPushObj(msg, &pushObj)
+	err := sJson.ToObj(msg, &pushObj)
+	if err != nil {
+		sLog.Error("listCandle: sJson.ToObj(): %s", err)
+		return
+	}
 
 	// sLog.Debug("Topic: %s  ..  Type: %s  ..  TimeStamp: %d", pushObj.Topic, pushObj.Type, pushObj.TimeStamp)
 
@@ -102,8 +105,11 @@ func listCandle(msg string) {
 
 func listTrade(msg string) {
 	var pushObj wsPush.TradeResp
-
-	utils.GetPushObj(msg, &pushObj)
+	err := sJson.ToObj(msg, &pushObj)
+	if err != nil {
+		sLog.Error("listTrade: sJson.ToObj(): %s", err)
+		return
+	}
 
 	// sLog.Debug("Topic: %s  ..  Type: %s  ..  TimeStamp: %d", pushObj.Topic, pushObj.Type, pushObj.TimeStamp)
 
@@ -114,20 +120,24 @@ func listTrade(msg string) {
 
 func listLiquidation(msg string) {
 	var pushObj wsPush.LiquidationResp
-
-	utils.GetPushObj(msg, &pushObj)
+	err := sJson.ToObj(msg, &pushObj)
+	if err != nil {
+		sLog.Error("listLiquidation: sJson.ToObj(): %s", err)
+		return
+	}
 
 	// sLog.Debug("Topic: %s  ..  Type: %s  ..  TimeStamp: %d", pushObj.Topic, pushObj.Type, pushObj.TimeStamp)
 
-	for _, data := range pushObj.Data {
-		sLog.Info("%s: %+v ", pushObj.Topic, data)
-	}
+	sLog.Info("%s: %+v ", pushObj.Topic, pushObj.Data)
 }
 
 func listTickers(msg string) {
 	var pushObj wsPush.TickerResp
-
-	utils.GetPushObj(msg, &pushObj)
+	err := sJson.ToObj(msg, &pushObj)
+	if err != nil {
+		sLog.Error("listTickers: sJson.ToObj(): %s", err)
+		return
+	}
 
 	// sLog.Debug("Topic: %s  ..  Type: %s  ..  TimeStamp: %d", pushObj.Topic, pushObj.Type, pushObj.TimeStamp)
 

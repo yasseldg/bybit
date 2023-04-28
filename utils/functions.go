@@ -10,8 +10,6 @@ import (
 	"time"
 
 	"github.com/yasseldg/bybit/constants"
-
-	"github.com/yasseldg/simplego/sLog"
 )
 
 func TimesStamp() string {
@@ -57,19 +55,6 @@ func BuildGetParams(params map[string]string) string {
 	return "?" + urlParams.Encode()
 }
 
-func JSONToMap(str string) map[string]interface{} {
-
-	var tempMap map[string]interface{}
-
-	err := json.Unmarshal([]byte(str), &tempMap)
-
-	if err != nil {
-		panic(err)
-	}
-
-	return tempMap
-}
-
 func NewParams() map[string]string {
 	return make(map[string]string)
 }
@@ -94,11 +79,4 @@ func GetSignedInt(checksum string) string {
 		return strconv.FormatUint(a, 10)
 	}
 	return checksum
-}
-
-func GetPushObj(msg string, obj any) {
-	err := json.Unmarshal([]byte(msg), obj)
-	if err != nil {
-		sLog.Error("json.Unmarshal([]byte(msg), obj)  --  error: %s", err)
-	}
 }
