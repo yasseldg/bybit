@@ -6,11 +6,11 @@ type LiquidationResp struct {
 }
 
 type Liquidation struct {
-	UpdateTime int64  `json:"updateTime"`
-	Symbol     string `json:"symbol"`
-	Side       string `json:"side"`
-	Size       string `json:"size"`
-	Price      string `json:"price"`
+	UpdatedTime int64  `json:"updatedTime"`
+	Symbol      string `json:"symbol"`
+	Side        string `json:"side"`
+	Size        string `json:"size"`
+	Price       string `json:"price"`
 }
 
 // Parameter	Type	Comments
