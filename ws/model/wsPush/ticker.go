@@ -25,8 +25,11 @@ type Ticker struct {
 	MarkPriceIv            string           `json:"markPriceIv"`
 	UnderlyingPrice        string           `json:"underlyingPrice"`
 	OpenInterest           string           `json:"openInterest"`
+	OpenInterestValue      string           `json:"openInterestValue"`
 	Turnover24H            string           `json:"turnover24h"`
 	Volume24H              string           `json:"volume24h"`
+	FundingRate            string           `json:"fundingRate"`
+	NextFundingTime        string           `json:"nextFundingTime"`
 	TotalVolume            string           `json:"totalVolume"`
 	TotalTurnover          string           `json:"totalTurnover"`
 	Delta                  string           `json:"delta"`
