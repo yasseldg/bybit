@@ -1,0 +1,4 @@
+url: api.bybit.com
+secure: true
+port: 
+pathprefix: v5

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/yasseldg/bybit"
@@ -16,12 +17,37 @@ func main() {
 	t := time.Now()
 	sLog.Info("Cmd Main \n\n")
 
+	rest()
+
 	// web socket
-	wssLinear() //  comment for test Inverse
-	wssInverse()
+	// wss()
 
 	fmt.Println()
 	sLog.Info("Cmd Main: time: %d Segundos \n\n", time.Since(t)/time.Second)
+}
+
+func rest() {
+
+	os.Setenv("Serv_Bybit_API", "API_v5")
+
+	client := bybit.NewRestClient("Serv_Bybit_API", false)
+
+	instruments, err := client.InstrumentsInfos(constants.Category_Linear, constants.InstrumentStatus_Trading, "RSS3USDT")
+	if err != nil {
+		sLog.Error("client.InstrumentsInfos(): %s", err)
+		return
+	}
+
+	println()
+	sLog.Debug("InstrumentsInfos: %+v", instruments)
+
+	// url := "https://api-testnet.bybit.com/v5/market/instruments-info"
+	// method := "GET"
+}
+
+func wss() {
+	wssLinear() //  comment for test Inverse
+	wssInverse()
 }
 
 func wssLinear() {
