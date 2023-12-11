@@ -59,3 +59,29 @@ func (b BybitRestClient) InstrumentsInfos(category constants.Category, status co
 
 	return response.Result.List, nil
 }
+
+func (b BybitRestClient) Tickers(category constants.Category, symbol string) (restResponse.Tickerss, error) {
+	if len(category) == 0 {
+		return nil, fmt.Errorf("categorys is empty")
+	}
+
+	// ?category=linear,inverse&symbol=BTCUSDT&status=Trading"
+	params := fmt.Sprintf("category=%s", category)
+
+	if len(symbol) > 0 {
+		params = fmt.Sprintf("%s&symbol=%s", params, symbol)
+	}
+
+	b.SetRecourse(constants.Recourse_Market)
+	b.SetEndPoint(constants.EndPoint_Tickers)
+
+	var response restResponse.TickersResp
+	err := b.RestClient.Call(params, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	sLog.Debug("Tickers: %+v", response)
+
+	return response.Result.List, nil
+}

@@ -15,6 +15,7 @@ type EndPoint string
 const (
 	// Market
 	EndPoint_InstrumentsInfo = EndPoint("instruments-info")
+	EndPoint_Tickers         = EndPoint("tickers")
 )
 
 type Category string
