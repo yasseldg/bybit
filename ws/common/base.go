@@ -109,12 +109,12 @@ func (p *BaseWsClient) ExecuterPing() {
 }
 
 func (p *BaseWsClient) ping() {
-	json, _ := sJson.ToJson(wsRequest.Base{Op: constants.WsOpPing})
+	json, _ := sJson.ToString(wsRequest.Base{Op: constants.WsOpPing})
 	p.Send(json, true)
 }
 
 func (p *BaseWsClient) SendByType(req wsRequest.Base) {
-	json, _ := sJson.ToJson(req)
+	json, _ := sJson.ToString(req)
 	p.Send(json, false)
 }
 
