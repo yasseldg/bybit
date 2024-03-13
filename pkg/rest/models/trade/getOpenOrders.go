@@ -1,7 +1,9 @@
-package model
+package trade
 
 import (
 	"net/url"
+
+	"github.com/yasseldg/bybit/pkg/rest/errors"
 )
 
 type GetOpenOrders struct {
@@ -16,7 +18,7 @@ type GetOpenOrders struct {
 
 func NewGetOpenOrders(category string) (*GetOpenOrders, error) {
 	if len(category) == 0 {
-		return nil, errInvalidCategory
+		return nil, errors.ErrInvalidCategory
 	}
 
 	return &GetOpenOrders{

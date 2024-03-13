@@ -10,34 +10,34 @@ import (
 	"github.com/yasseldg/bybit/internal/common"
 )
 
-type PlaceOrder struct {
+type AmendOrder struct {
 	c *common.Client
 	r *common.Request
 
-	*trade.PlaceOrder
+	*trade.AmendOrder
 }
 
-type PlaceOrderResponse struct {
+type AmendOrderResponse struct {
 	common.InfoResponse
 	Result response.OrderResult `json:"result"`
 }
 
-func NewPlaceOrder(c *common.Client, category, symbol, side, orderType string, qty float64, prec int) (*PlaceOrder, error) {
-	order, err := trade.NewPlaceOrder(category, symbol, side, orderType, qty, prec)
+func NewAmendOrder(c *common.Client, category, symbol, orderId string, prec int) (*AmendOrder, error) {
+	order, err := trade.NewAmendOrder(category, symbol, orderId, prec)
 	if err != nil {
 		return nil, err
 	}
 
-	request := new(common.Request).EndPoint("/v5/order/create").Post().Signed()
+	request := new(common.Request).EndPoint("/v5/order/amend").Post().Signed()
 
-	return &PlaceOrder{
+	return &AmendOrder{
 		c:          c,
 		r:          request,
-		PlaceOrder: order,
+		AmendOrder: order,
 	}, nil
 }
 
-func (o *PlaceOrder) Do(ctx context.Context, opts ...common.RequestOption) (*PlaceOrderResponse, error) {
+func (o *AmendOrder) Do(ctx context.Context, opts ...common.RequestOption) (*AmendOrderResponse, error) {
 
 	o.r.SetParams(o.GetParams())
 
@@ -46,7 +46,7 @@ func (o *PlaceOrder) Do(ctx context.Context, opts ...common.RequestOption) (*Pla
 		return nil, err
 	}
 
-	res := new(PlaceOrderResponse)
+	res := new(AmendOrderResponse)
 	err = json.Unmarshal(data, res)
 	if err != nil {
 		return nil, err

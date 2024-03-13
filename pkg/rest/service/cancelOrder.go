@@ -4,17 +4,17 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/yasseldg/bybit/internal/common"
-
-	"github.com/yasseldg/bybit/pkg/rest/model"
+	"github.com/yasseldg/bybit/pkg/rest/models/trade"
 	"github.com/yasseldg/bybit/pkg/rest/response"
+
+	"github.com/yasseldg/bybit/internal/common"
 )
 
 type CancelOrder struct {
 	c *common.Client
 	r *common.Request
 
-	*model.CancelOrder
+	*trade.CancelOrder
 }
 
 type CancelOrderResponse struct {
@@ -23,7 +23,7 @@ type CancelOrderResponse struct {
 }
 
 func NewCancelOrder(c *common.Client, category, symbol, order_id string) (*CancelOrder, error) {
-	orders, err := model.NewCancelOrder(category, symbol, order_id)
+	orders, err := trade.NewCancelOrder(category, symbol, order_id)
 	if err != nil {
 		return nil, err
 	}

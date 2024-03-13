@@ -1,6 +1,10 @@
 package response
 
-import "github.com/yasseldg/bybit/internal/common"
+import (
+	"github.com/yasseldg/bybit/pkg/common"
+
+	internalCommon "github.com/yasseldg/bybit/internal/common"
+)
 
 type OrderResult struct {
 	OrderId     string `json:"orderId"`
@@ -12,48 +16,10 @@ type ListOrderResult struct {
 }
 
 type OrderInfo struct {
-	OrderId            string `json:"orderId"`
-	OrderLinkId        string `json:"orderLinkId"`
-	BlockTradeId       string `json:"blockTradeId"`
-	Symbol             string `json:"symbol"`
-	Price              string `json:"price"`
-	Qty                string `json:"qty"`
-	Side               string `json:"side"`
-	IsLeverage         string `json:"isLeverage"`
-	PositionIdx        int    `json:"positionIdx"`
-	OrderStatus        string `json:"orderStatus"`
-	CancelType         string `json:"cancelType"`
-	RejectReason       string `json:"rejectReason"`
-	AvgPrice           string `json:"avgPrice"`
-	LeavesQty          string `json:"leavesQty"`
-	LeavesValue        string `json:"leavesValue"`
-	CumExecQty         string `json:"cumExecQty"`
-	CumExecValue       string `json:"cumExecValue"`
-	CumExecFee         string `json:"cumExecFee"`
-	TimeInForce        string `json:"timeInForce"`
-	OrderType          string `json:"orderType"`
-	StopOrderType      string `json:"stopOrderType"`
-	OrderIv            string `json:"orderIv"`
-	TriggerPrice       string `json:"triggerPrice"`
-	TakeProfit         string `json:"takeProfit"`
-	StopLoss           string `json:"stopLoss"`
-	TpslMode           string `json:"tpslMode"`
-	OcoTriggerType     string `json:"ocoTriggerType"`
-	TpLimitPrice       string `json:"tpLimitPrice"`
-	SlLimitPrice       string `json:"slLimitPrice"`
-	TpTriggerBy        string `json:"tpTriggerBy"`
-	SlTriggerBy        string `json:"slTriggerBy"`
-	TriggerDirection   int    `json:"triggerDirection"`
-	TriggerBy          string `json:"triggerBy"`
-	LastPriceOnCreated string `json:"lastPriceOnCreated"`
-	ReduceOnly         bool   `json:"reduceOnly"`
-	CloseOnTrigger     bool   `json:"closeOnTrigger"`
-	PlaceType          string `json:"placeType"`
-	SmpType            string `json:"smpType"`
-	SmpGroup           int    `json:"smpGroup"`
-	SmpOrderId         string `json:"smpOrderId"`
-	CreatedTime        string `json:"createdTime"`
-	UpdatedTime        string `json:"updatedTime"`
+	common.Order
+
+	IsLeverage     string `json:"isLeverage"`
+	OcoTriggerType string `json:"ocoTriggerType"`
 }
 
 type OpenOrdersInfo struct {
@@ -73,7 +39,7 @@ type BorrowQuotaInfo struct {
 }
 
 type BatchOrderServerResponse struct {
-	common.BaseResponse
+	internalCommon.BaseResponse
 	Result struct {
 		List []struct {
 			Category    string  `json:"category"`

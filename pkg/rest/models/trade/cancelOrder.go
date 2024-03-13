@@ -1,7 +1,9 @@
-package model
+package trade
 
 import (
 	"net/url"
+
+	"github.com/yasseldg/bybit/pkg/rest/errors"
 )
 
 type CancelOrder struct {
@@ -14,13 +16,13 @@ type CancelOrder struct {
 
 func NewCancelOrder(category, symbol, order_id string) (*CancelOrder, error) {
 	if category == "" {
-		return nil, errInvalidCategory
+		return nil, errors.ErrInvalidCategory
 	}
 	if symbol == "" {
-		return nil, errInvalidSymbol
+		return nil, errors.ErrInvalidSymbol
 	}
 	if order_id == "" {
-		return nil, errInvalidOrderId
+		return nil, errors.ErrInvalidOrderId
 	}
 
 	return &CancelOrder{

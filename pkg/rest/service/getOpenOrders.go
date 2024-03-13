@@ -4,17 +4,17 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/yasseldg/bybit/internal/common"
-
-	"github.com/yasseldg/bybit/pkg/rest/model"
+	"github.com/yasseldg/bybit/pkg/rest/models/trade"
 	"github.com/yasseldg/bybit/pkg/rest/response"
+
+	"github.com/yasseldg/bybit/internal/common"
 )
 
 type GetOpenOrders struct {
 	c *common.Client
 	r *common.Request
 
-	*model.GetOpenOrders
+	*trade.GetOpenOrders
 }
 
 type GetOpenOrdersResponse struct {
@@ -23,7 +23,7 @@ type GetOpenOrdersResponse struct {
 }
 
 func NewGetOpenOrders(c *common.Client, category string) (*GetOpenOrders, error) {
-	orders, err := model.NewGetOpenOrders(category)
+	orders, err := trade.NewGetOpenOrders(category)
 	if err != nil {
 		return nil, err
 	}

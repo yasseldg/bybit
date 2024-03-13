@@ -6,14 +6,15 @@ import (
 	"sync"
 	"time"
 
-	"github.com/yasseldg/bybit/config"
-	"github.com/yasseldg/bybit/constants"
-	"github.com/yasseldg/bybit/utils"
 	"github.com/yasseldg/bybit/ws/model"
 	"github.com/yasseldg/bybit/ws/model/wsRequest"
 
-	"github.com/yasseldg/simplego/sJson"
-	"github.com/yasseldg/simplego/sLog"
+	"github.com/yasseldg/bybit/config"
+	"github.com/yasseldg/bybit/constants"
+	"github.com/yasseldg/bybit/internal/common"
+
+	"github.com/yasseldg/go-simple/logs/sLog"
+	"github.com/yasseldg/go-simple/types/sJson"
 
 	"github.com/gorilla/websocket"
 	"github.com/robfig/cron"
@@ -80,26 +81,15 @@ func (p *BaseWsClient) ConnectWebSocket() {
 	p.Connection = true
 }
 
+// real authentication, Signer is not used
 func (p *BaseWsClient) Login() {
-	creds := config.GetDefaultCredentials()
-
-	timesStamp := utils.TimesStampSec()
-	sign := p.Signer.Sign(constants.WsAuthMethod, constants.WsAuthPath, "", timesStamp)
-
-	loginReq := wsRequest.Login{
-		ApiKey:     creds.ApiKey,
-		Passphrase: creds.PASSPHRASE,
-		Timestamp:  timesStamp,
-		Sign:       sign,
+	config := common.GetWsConfig("", "")
+	auth, err := config.GetAuth()
+	if err != nil {
+		sLog.Error("WebSocket login error: %s", err)
+		return
 	}
-	var args []interface{}
-	args = append(args, loginReq)
-
-	baseReq := wsRequest.Base{
-		Op:   constants.WsOpAuth,
-		Args: args,
-	}
-	p.SendByType(baseReq)
+	p.Send(auth, true)
 }
 
 func (p *BaseWsClient) StartReadLoop() {
