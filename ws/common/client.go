@@ -3,10 +3,11 @@ package common
 import (
 	"time"
 
-	"github.com/yasseldg/bybit/constants"
 	"github.com/yasseldg/bybit/ws/model/wsRequest"
 
-	"github.com/yasseldg/simplego/sLog"
+	"github.com/yasseldg/bybit/constants"
+
+	"github.com/yasseldg/go-simple/logs/sLog"
 )
 
 type WsClient struct {

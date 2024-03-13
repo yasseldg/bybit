@@ -21,6 +21,17 @@ const (
 	Topic_Orderbook   = Topic("orderbook")
 	Topic_Tickers     = Topic("tickers")
 	Topic_Liquidation = Topic("liquidation")
+
+	Topic_Position         = Topic("position")
+	Topic_Position_Linear  = Topic("position.linear")
+	Topic_Position_Inverse = Topic("position.inverse")
+	Topic_Position_Option  = Topic("position.option")
+
+	Topic_Order         = Topic("order")
+	Topic_Order_Spot    = Topic("order.spot")
+	Topic_Order_Linear  = Topic("order.linear")
+	Topic_Order_Inverse = Topic("order.inverse")
+	Topic_Order_Option  = Topic("order.option")
 )
 
 const (

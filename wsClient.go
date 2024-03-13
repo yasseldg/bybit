@@ -4,7 +4,7 @@ import (
 	"github.com/yasseldg/bybit/constants"
 	"github.com/yasseldg/bybit/ws/common"
 
-	"github.com/yasseldg/simplego/sLog"
+	"github.com/yasseldg/go-simple/logs/sLog"
 )
 
 // ws

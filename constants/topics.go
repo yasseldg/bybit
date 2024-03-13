@@ -30,3 +30,11 @@ func GetTopicTickers(symbol Symbol) SubscribeTopic {
 func GetTopicLiquidation(symbol Symbol) SubscribeTopic {
 	return SubscribeTopic(fmt.Sprintf("%s.%s", Topic_Liquidation, symbol))
 }
+
+func GetTopicPositionLinear() SubscribeTopic {
+	return SubscribeTopic(Topic_Position_Linear)
+}
+
+func GetTopicOrderLinear() SubscribeTopic {
+	return SubscribeTopic(Topic_Order_Linear)
+}
