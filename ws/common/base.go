@@ -83,6 +83,30 @@ func (p *BaseWsClient) ConnectWebSocket() {
 
 // real authentication, Signer is not used
 func (p *BaseWsClient) Login() {
+	if !p.NeedLogin {
+		return
+	}
+
+	sLog.Info("WebSocket login in ...")
+	c := 0
+	for {
+		p.login()
+		time.Sleep(1 * time.Second)
+
+		if p.LoginStatus {
+			sLog.Info("WebSocket login in ... success")
+			break
+		}
+
+		if c > 10 {
+			sLog.Error("WebSocket login in ... failed")
+			break
+		}
+		c++
+	}
+}
+
+func (p *BaseWsClient) login() {
 	config := common.GetWsConfig("", "")
 	auth, err := config.GetAuth()
 	if err != nil {
@@ -164,9 +188,10 @@ func (p *BaseWsClient) tickerLoop() {
 			p.ConnectWebSocket()
 			if p.Connection {
 				p.LastReceivedTime = time.Now()
-				if p.NeedLogin {
-					p.Login()
-				}
+
+				// Login again
+				p.Login()
+
 				// Subscribe All again
 				p.SubscribeAll()
 			}
