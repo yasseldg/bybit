@@ -1,6 +1,7 @@
 package trade
 
 import (
+	"fmt"
 	"net/url"
 
 	"github.com/yasseldg/bybit/pkg/rest/errors"
@@ -44,6 +45,10 @@ func newOrder(category, symbol string, prec int) (*Order, error) {
 		symbol:   symbol,
 		prec:     prec,
 	}, nil
+}
+
+func (o *Order) String() string {
+	return fmt.Sprintf("%v", o.getParams())
 }
 
 func (o *Order) TriggerPrice(triggerPrice float64) *Order {

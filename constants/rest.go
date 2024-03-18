@@ -37,3 +37,10 @@ const (
 	InstrumentStatus_Delivering = InstrumentStatus("Delivering")
 	InstrumentStatus_Closed     = InstrumentStatus("Closed")
 )
+
+type OrderType string
+
+const (
+	OrderType_Limit  = OrderType("Limit")
+	OrderType_Market = OrderType("Market")
+)
