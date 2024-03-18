@@ -5,6 +5,7 @@ import (
 
 	"github.com/yasseldg/bybit/pkg/rest/errors"
 
+	"github.com/yasseldg/go-simple/logs/sLog"
 	"github.com/yasseldg/go-simple/types/sBool"
 	"github.com/yasseldg/go-simple/types/sFloats"
 	"github.com/yasseldg/go-simple/types/sInts"
@@ -51,6 +52,10 @@ func NewPlaceOrder(category, symbol, side, orderType string, qty float64, prec i
 		orderType: orderType,
 		qty:       sFloats.ToString(qty, prec),
 	}, nil
+}
+
+func (o *PlaceOrder) Log() {
+	sLog.Info("PlaceOrder: %v ", o.GetParams())
 }
 
 func (o *PlaceOrder) IsLeverage(isLeverage int) *PlaceOrder {

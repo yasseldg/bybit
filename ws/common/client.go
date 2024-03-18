@@ -1,13 +1,9 @@
 package common
 
 import (
-	"time"
-
 	"github.com/yasseldg/bybit/ws/model/wsRequest"
 
 	"github.com/yasseldg/bybit/constants"
-
-	"github.com/yasseldg/go-simple/logs/sLog"
 )
 
 type WsClient struct {
@@ -22,28 +18,7 @@ func (wsc *WsClient) Init(channel constants.Channel, needLogin bool, listener On
 	wsc.BaseWsClient.StartReadLoop()
 	wsc.BaseWsClient.ExecuterPing()
 	wsc.BaseWsClient.StartTickerLoop()
-
-	// TO FIX
-	if needLogin {
-		sLog.Info("WebSocket login in ...")
-		c := 0
-		for {
-			wsc.BaseWsClient.Login()
-			time.Sleep(1 * time.Second)
-			c++
-
-			if c > 10 {
-				sLog.Error("WebSocket login in ... failed")
-				break
-			}
-
-			if !wsc.BaseWsClient.LoginStatus {
-				continue
-			}
-			break
-		}
-		sLog.Info("WebSocket login in ... success")
-	}
+	wsc.BaseWsClient.Login()
 }
 
 func (wsc *WsClient) UnSubscribe(list []constants.SubscribeTopic) {
@@ -61,7 +36,7 @@ func (wsc *WsClient) UnSubscribe(list []constants.SubscribeTopic) {
 		Args: args,
 	}
 
-	wsc.SendMessageByType(wsBaseReq)
+	wsc.BaseWsClient.SendByType(wsBaseReq)
 }
 
 func (wsc *WsClient) SubscribeDef(list []constants.SubscribeTopic) {
@@ -74,7 +49,7 @@ func (wsc *WsClient) SubscribeDef(list []constants.SubscribeTopic) {
 		Op:   constants.WsOpSubscribe,
 		Args: args,
 	}
-	wsc.SendMessageByType(wsBaseReq)
+	wsc.BaseWsClient.SendByType(wsBaseReq)
 }
 
 func (wsc *WsClient) Subscribe(list []constants.SubscribeTopic, listener OnReceive) {
@@ -90,19 +65,7 @@ func (wsc *WsClient) Subscribe(list []constants.SubscribeTopic, listener OnRecei
 		Op:   constants.WsOpSubscribe,
 		Args: args,
 	}
-	wsc.SendMessageByType(wsBaseReq)
-}
-
-func (wsc *WsClient) Connect() {
-	wsc.BaseWsClient.Connect()
-}
-
-func (wsc *WsClient) SendMessage(msg string) {
-	wsc.BaseWsClient.Send(msg, false)
-}
-
-func (wsc *WsClient) SendMessageByType(req wsRequest.Base) {
-	wsc.BaseWsClient.SendByType(req)
+	wsc.BaseWsClient.SendByType(wsBaseReq)
 }
 
 func (wsc *WsClient) Close() {
