@@ -1,11 +1,8 @@
 package position
 
 import (
-	"net/url"
-
-	"github.com/yasseldg/bybit/pkg/rest/errors"
-
-	"github.com/yasseldg/go-simple/types/sInts"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 )
 
 type Position struct {
@@ -53,26 +50,26 @@ func (p *Position) Cursor(cursor string) *Position {
 }
 
 // Params returns the order parameters
-func (p *Position) GetParams() url.Values {
-	ps := url.Values{}
+func (p *Position) GetParams() common.Params {
+	cp := common.NewParams()
 
-	ps.Add("category", p.category)
+	cp.Set("category", p.category)
 
 	if p.symbol != nil {
-		ps.Add("symbol", *p.symbol)
+		cp.Set("symbol", *p.symbol)
 	}
 	if p.baseCoin != nil {
-		ps.Add("baseCoin", *p.baseCoin)
+		cp.Set("baseCoin", *p.baseCoin)
 	}
 	if p.settleCoin != nil {
-		ps.Add("settleCoin", *p.settleCoin)
+		cp.Set("settleCoin", *p.settleCoin)
 	}
 	if p.limit != nil {
-		ps.Add("limit", sInts.ToString(int64(*p.limit)))
+		cp.Set("limit", *p.limit)
 	}
 	if p.cursor != nil {
-		ps.Add("cursor", *p.cursor)
+		cp.Set("cursor", *p.cursor)
 	}
 
-	return ps
+	return cp
 }

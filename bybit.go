@@ -1,8 +1,8 @@
 package bybit
 
 import (
-	"github.com/yasseldg/bybit/internal/common"
-	"github.com/yasseldg/bybit/pkg/rest/service"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/service"
 )
 
 type Rest struct {

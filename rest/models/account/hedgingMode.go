@@ -1,9 +1,8 @@
 package account
 
 import (
-	"net/url"
-
-	"github.com/yasseldg/bybit/pkg/rest/errors"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 )
 
 type HedgingMode struct {
@@ -21,10 +20,10 @@ func NewHedgingMode(hedging_mode string) (*HedgingMode, error) {
 }
 
 // Params returns the order parameters
-func (o *HedgingMode) GetParams() url.Values {
-	p := url.Values{}
+func (o *HedgingMode) GetParams() common.Params {
+	p := common.NewParams()
 
-	p.Add("setHedgingMode", o.setHedgingMode)
+	p.Set("setHedgingMode", o.setHedgingMode)
 
 	return p
 }

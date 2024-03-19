@@ -4,9 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/yasseldg/bybit/pkg/rest/models/account"
-
-	"github.com/yasseldg/bybit/internal/common"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/models/account"
 )
 
 type SetSpotHedging struct {

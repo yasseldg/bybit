@@ -1,9 +1,8 @@
 package trade
 
 import (
-	"net/url"
-
-	"github.com/yasseldg/bybit/pkg/rest/errors"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 )
 
 type CancelAllOrders struct {
@@ -51,32 +50,32 @@ func (o *CancelAllOrders) StopOrderType(stopOrderType string) *CancelAllOrders {
 }
 
 // Params returns the order parameters
-func (o *CancelAllOrders) GetParams() url.Values {
-	p := url.Values{}
+func (o *CancelAllOrders) GetParams() common.Params {
+	cp := common.NewParams()
 
-	p.Add("category", o.category)
+	cp.Set("category", o.category)
 
 	if o.symbol != nil {
-		p.Add("symbol", *o.symbol)
+		cp.Set("symbol", *o.symbol)
 	}
 
 	if o.baseCoin != nil {
-		p.Add("baseCoin", *o.baseCoin)
+		cp.Set("baseCoin", *o.baseCoin)
 	}
 
 	if o.settleCoin != nil {
-		p.Add("settleCoin", *o.settleCoin)
+		cp.Set("settleCoin", *o.settleCoin)
 	}
 
 	if o.orderFilter != nil {
-		p.Add("orderFilter", *o.orderFilter)
+		cp.Set("orderFilter", *o.orderFilter)
 	}
 
 	if o.stopOrderType != nil {
-		p.Add("stopOrderType", *o.stopOrderType)
+		cp.Set("stopOrderType", *o.stopOrderType)
 	}
 
-	return p
+	return cp
 }
 
 // category	true	string	Product type

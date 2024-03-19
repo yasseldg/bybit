@@ -1,9 +1,8 @@
 package trade
 
 import (
-	"net/url"
-
-	"github.com/yasseldg/bybit/pkg/rest/errors"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 
 	"github.com/yasseldg/go-simple/types/sFloats"
 )
@@ -38,13 +37,13 @@ func (o *AmendOrder) Qty(qty float64) *AmendOrder {
 }
 
 // Params returns the order parameters
-func (o *AmendOrder) GetParams() url.Values {
+func (o *AmendOrder) GetParams() common.Params {
 	p := o.Order.getParams()
 
-	p.Add("orderId", o.orderId)
+	p.Set("orderId", o.orderId)
 
 	if o.qty != nil {
-		p.Add("qty", *o.qty)
+		p.Set("qty", *o.qty)
 	}
 
 	return p
