@@ -4,10 +4,9 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/yasseldg/bybit/pkg/rest/models/position"
-	"github.com/yasseldg/bybit/pkg/rest/response"
-
-	"github.com/yasseldg/bybit/internal/common"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/models/position"
+	"github.com/yasseldg/bybit/rest/response"
 )
 
 type GetPositionInfo struct {

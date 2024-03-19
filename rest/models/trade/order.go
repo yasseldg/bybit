@@ -2,9 +2,9 @@ package trade
 
 import (
 	"fmt"
-	"net/url"
 
-	"github.com/yasseldg/bybit/pkg/rest/errors"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 
 	"github.com/yasseldg/go-simple/types/sFloats"
 )
@@ -118,49 +118,49 @@ func (o *Order) SlLimitPrice(price float64) *Order {
 }
 
 // Params returns the order parameters
-func (o *Order) getParams() url.Values {
-	p := url.Values{}
+func (o *Order) getParams() common.Params {
+	cp := common.NewParams()
 
-	p.Add("category", o.category)
-	p.Add("symbol", o.symbol)
+	cp.Set("category", o.category)
+	cp.Set("symbol", o.symbol)
 
 	if o.price != nil {
-		p.Add("price", *o.price)
+		cp.Set("price", *o.price)
 	}
 
 	if o.triggerPrice != nil {
-		p.Add("triggerPrice", *o.triggerPrice)
+		cp.Set("triggerPrice", *o.triggerPrice)
 	}
 	if o.triggerBy != nil {
-		p.Add("triggerBy", *o.triggerBy)
+		cp.Set("triggerBy", *o.triggerBy)
 	}
 	if o.orderIv != nil {
-		p.Add("orderIv", *o.orderIv)
+		cp.Set("orderIv", *o.orderIv)
 	}
 	if o.orderLinkId != nil {
-		p.Add("orderLinkId", *o.orderLinkId)
+		cp.Set("orderLinkId", *o.orderLinkId)
 	}
 	if o.takeProfit != nil {
-		p.Add("takeProfit", *o.takeProfit)
+		cp.Set("takeProfit", *o.takeProfit)
 	}
 	if o.stopLoss != nil {
-		p.Add("stopLoss", *o.stopLoss)
+		cp.Set("stopLoss", *o.stopLoss)
 	}
 	if o.tpTriggerBy != nil {
-		p.Add("tpTriggerBy", *o.tpTriggerBy)
+		cp.Set("tpTriggerBy", *o.tpTriggerBy)
 	}
 	if o.slTriggerBy != nil {
-		p.Add("slTriggerBy", *o.slTriggerBy)
+		cp.Set("slTriggerBy", *o.slTriggerBy)
 	}
 	if o.tpslMode != nil {
-		p.Add("tpslMode", *o.tpslMode)
+		cp.Set("tpslMode", *o.tpslMode)
 	}
 	if o.tpLimitPrice != nil {
-		p.Add("tpLimitPrice", *o.tpLimitPrice)
+		cp.Set("tpLimitPrice", *o.tpLimitPrice)
 	}
 	if o.slLimitPrice != nil {
-		p.Add("slLimitPrice", *o.slLimitPrice)
+		cp.Set("slLimitPrice", *o.slLimitPrice)
 	}
 
-	return p
+	return cp
 }

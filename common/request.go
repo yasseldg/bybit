@@ -15,6 +15,16 @@ const (
 	secTypeSigned         // private Request
 )
 
+type Params map[string]interface{}
+
+func NewParams() Params {
+	return make(Params)
+}
+
+func (p Params) Set(key string, value interface{}) {
+	p[key] = value
+}
+
 // Request define an API Request
 type Request struct {
 	method     string
@@ -55,14 +65,20 @@ func (r *Request) EndPoint(endpoint string) *Request {
 	return r
 }
 
-func (r *Request) SetParams(params url.Values) error {
-	r.query = params
+// setParam set param with key/value to query string
+func (r *Request) setParam(key string, value interface{}) {
+	r.validate()
+	r.query.Set(key, fmt.Sprintf("%v", value))
+}
 
+func (r *Request) SetParams(params Params) error {
 	switch r.method {
 	case http.MethodGet:
-
+		for k, v := range params {
+			r.setParam(k, v)
+		}
 	case http.MethodPost:
-		jsonData, err := json.Marshal(r.query)
+		jsonData, err := json.Marshal(params)
 		if err != nil {
 			return fmt.Errorf("error marshalling query: %s", err)
 		}

@@ -1,9 +1,8 @@
 package response
 
 import (
-	"github.com/yasseldg/bybit/pkg/common"
-
-	internalCommon "github.com/yasseldg/bybit/internal/common"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/model"
 )
 
 type OrderResult struct {
@@ -16,7 +15,7 @@ type ListOrderResult struct {
 }
 
 type OrderInfo struct {
-	common.Order
+	model.Order
 
 	IsLeverage     string `json:"isLeverage"`
 	OcoTriggerType string `json:"ocoTriggerType"`
@@ -39,7 +38,7 @@ type BorrowQuotaInfo struct {
 }
 
 type BatchOrderServerResponse struct {
-	internalCommon.BaseResponse
+	common.BaseResponse
 	Result struct {
 		List []struct {
 			Category    string  `json:"category"`

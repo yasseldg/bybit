@@ -1,9 +1,8 @@
 package trade
 
 import (
-	"net/url"
-
-	"github.com/yasseldg/bybit/pkg/rest/errors"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 )
 
 type CancelOrder struct {
@@ -43,19 +42,19 @@ func (o *CancelOrder) OrderFilter(filter string) *CancelOrder {
 }
 
 // Params returns the order parameters
-func (o *CancelOrder) GetParams() url.Values {
-	p := url.Values{}
+func (o *CancelOrder) GetParams() common.Params {
+	cp := common.NewParams()
 
-	p.Add("category", o.category)
-	p.Add("symbol", o.symbol)
-	p.Add("orderId", o.orderId)
+	cp.Set("category", o.category)
+	cp.Set("symbol", o.symbol)
+	cp.Set("orderId", o.orderId)
 
 	if o.orderLinkId != nil {
-		p.Add("orderLinkId", *o.orderLinkId)
+		cp.Set("orderLinkId", *o.orderLinkId)
 	}
 	if o.orderFilter != nil {
-		p.Add("orderFilter", *o.orderFilter)
+		cp.Set("orderFilter", *o.orderFilter)
 	}
 
-	return p
+	return cp
 }

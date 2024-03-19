@@ -51,24 +51,27 @@ func (c *Client) Log() {
 
 func (c *Client) Call(ctx context.Context, r *Request, opts ...RequestOption) (data []byte, err error) {
 	err = c.parseRequest(r, opts...)
+	if err != nil {
+		return nil, err
+	}
 	req, err := http.NewRequest(r.method, r.fullURL, r.body)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 	req = req.WithContext(ctx)
 	req.Header = r.header
-	c.debug("Request: %#v", req)
+	c.debug("request: %#v", req)
 	f := c.do
 	if f == nil {
 		f = c.HttpClient.Do
 	}
 	res, err := f(req)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 	data, err = io.ReadAll(res.Body)
 	if err != nil {
-		return []byte{}, err
+		return nil, err
 	}
 	defer func() {
 		cerr := res.Body.Close()
@@ -83,9 +86,7 @@ func (c *Client) Call(ctx context.Context, r *Request, opts ...RequestOption) (d
 	c.debug("response status code: %d", res.StatusCode)
 
 	if res.StatusCode >= http.StatusBadRequest {
-		var (
-			apiErr = new(RetResponse)
-		)
+		apiErr := new(RetResponse)
 		e := json.Unmarshal(data, apiErr)
 		if e != nil {
 			c.debug("failed to unmarshal json: %s", e)

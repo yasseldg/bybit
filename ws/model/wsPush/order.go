@@ -3,7 +3,7 @@ package wsPush
 import (
 	"fmt"
 
-	"github.com/yasseldg/bybit/pkg/common"
+	"github.com/yasseldg/bybit/model"
 )
 
 type OrderResp struct {
@@ -12,7 +12,7 @@ type OrderResp struct {
 }
 
 type Order struct {
-	common.Order
+	model.Order
 
 	Category    string `json:"category"`
 	FeeCurrency string `json:"feeCurrency"`

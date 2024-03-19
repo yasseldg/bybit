@@ -6,12 +6,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/yasseldg/bybit/ws/model"
-	"github.com/yasseldg/bybit/ws/model/wsRequest"
-
+	"github.com/yasseldg/bybit/common"
 	"github.com/yasseldg/bybit/config"
 	"github.com/yasseldg/bybit/constants"
-	"github.com/yasseldg/bybit/internal/common"
+	"github.com/yasseldg/bybit/ws/model"
+	"github.com/yasseldg/bybit/ws/model/wsRequest"
 
 	"github.com/yasseldg/go-simple/logs/sLog"
 	"github.com/yasseldg/go-simple/types/sJson"

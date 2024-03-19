@@ -1,14 +1,11 @@
 package trade
 
 import (
-	"net/url"
-
-	"github.com/yasseldg/bybit/pkg/rest/errors"
+	"github.com/yasseldg/bybit/common"
+	"github.com/yasseldg/bybit/rest/errors"
 
 	"github.com/yasseldg/go-simple/logs/sLog"
-	"github.com/yasseldg/go-simple/types/sBool"
 	"github.com/yasseldg/go-simple/types/sFloats"
-	"github.com/yasseldg/go-simple/types/sInts"
 )
 
 type PlaceOrder struct {
@@ -114,46 +111,46 @@ func (o *PlaceOrder) SlOrderType(orderType string) *PlaceOrder {
 }
 
 // Params returns the order parameters
-func (o *PlaceOrder) GetParams() url.Values {
-	p := o.Order.getParams()
+func (o *PlaceOrder) GetParams() common.Params {
+	cp := o.Order.getParams()
 
-	p.Add("side", o.side)
-	p.Add("orderType", o.orderType)
-	p.Add("qty", o.qty)
+	cp.Set("side", o.side)
+	cp.Set("orderType", o.orderType)
+	cp.Set("qty", o.qty)
 
 	if o.isLeverage != nil {
-		p.Add("isLeverage", sInts.ToString(int64(*o.isLeverage)))
+		cp.Set("isLeverage", *o.isLeverage)
 	}
 	if o.triggerDirection != nil {
-		p.Add("triggerDirection", sInts.ToString(int64(*o.triggerDirection)))
+		cp.Set("triggerDirection", *o.triggerDirection)
 	}
 	if o.orderFilter != nil {
-		p.Add("orderFilter", *o.orderFilter)
+		cp.Set("orderFilter", *o.orderFilter)
 	}
 	if o.timeInForce != nil {
-		p.Add("timeInForce", *o.timeInForce)
+		cp.Set("timeInForce", *o.timeInForce)
 	}
 	if o.positionIdx != nil {
-		p.Add("positionIdx", sInts.ToString(int64(*o.positionIdx)))
+		cp.Set("positionIdx", *o.positionIdx)
 	}
 	if o.reduceOnly != nil {
-		p.Add("reduceOnly", sBool.ToString(*o.reduceOnly))
+		cp.Set("reduceOnly", *o.reduceOnly)
 	}
 	if o.closeOnTrigger != nil {
-		p.Add("closeOnTrigger", sBool.ToString(*o.closeOnTrigger))
+		cp.Set("closeOnTrigger", *o.closeOnTrigger)
 	}
 	if o.smpType != nil {
-		p.Add("smpType", *o.smpType)
+		cp.Set("smpType", *o.smpType)
 	}
 	if o.mmp != nil {
-		p.Add("mmp", sBool.ToString(*o.mmp))
+		cp.Set("mmp", *o.mmp)
 	}
 	if o.tpOrderType != nil {
-		p.Add("tpOrderType", *o.tpOrderType)
+		cp.Set("tpOrderType", *o.tpOrderType)
 	}
 	if o.slOrderType != nil {
-		p.Add("slOrderType", *o.slOrderType)
+		cp.Set("slOrderType", *o.slOrderType)
 	}
 
-	return p
+	return cp
 }
