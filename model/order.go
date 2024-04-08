@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/yasseldg/go-simple/logs/sLog"
+	"github.com/yasseldg/go-simple/types/sInts"
 )
 
 type Order struct {
@@ -60,4 +61,12 @@ func (o *Order) Details(name string) string {
 
 func (o *Order) Log(name string) {
 	sLog.Info(o.Details(name))
+}
+
+func (o *Order) CreatedAt() int64 {
+	return sInts.Get64(o.CreatedTime)
+}
+
+func (o *Order) UpdatedAt() int64 {
+	return sInts.Get64(o.UpdatedTime)
 }
