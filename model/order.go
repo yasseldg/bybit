@@ -1,12 +1,5 @@
 package model
 
-import (
-	"fmt"
-
-	"github.com/yasseldg/go-simple/logs/sLog"
-	"github.com/yasseldg/go-simple/types/sInts"
-)
-
 type Order struct {
 	OrderId            string `json:"orderId"`
 	Side               string `json:"side"`
@@ -48,25 +41,4 @@ type Order struct {
 	SmpOrderId         string `json:"smpOrderId"`
 	CreatedTime        string `json:"createdTime"`
 	UpdatedTime        string `json:"updatedTime"`
-}
-
-func (o *Order) String() string {
-	return fmt.Sprintf("%s .. %s .. %s .. %s .. %s .. %s", o.OrderId, o.OrderLinkId, o.Symbol, o.Side, o.StopOrderType, o.OrderStatus)
-}
-
-func (o *Order) Details(name string) string {
-	return fmt.Sprintf("Order ( %s ): id: %s .. link_id: %s .. %s .. %s .. %s .. type: %s .. stop_type: %s .. pos_idx: %d .. dir: %d .. qty: %s .. trig_price: %s .. c_at: %s, u_at: %s",
-		name, o.OrderId, o.OrderLinkId, o.Symbol, o.Side, o.OrderStatus, o.OrderType, o.StopOrderType, o.PositionIdx, o.TriggerDirection, o.Qty, o.TriggerPrice, o.CreatedTime, o.UpdatedTime)
-}
-
-func (o *Order) Log(name string) {
-	sLog.Info(o.Details(name))
-}
-
-func (o *Order) CreatedAt() int64 {
-	return sInts.Get64(o.CreatedTime)
-}
-
-func (o *Order) UpdatedAt() int64 {
-	return sInts.Get64(o.UpdatedTime)
 }
