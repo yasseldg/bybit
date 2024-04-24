@@ -31,10 +31,32 @@ func GetTopicLiquidation(symbol Symbol) SubscribeTopic {
 	return SubscribeTopic(fmt.Sprintf("%s.%s", Topic_Liquidation, symbol))
 }
 
-func GetTopicPositionLinear() SubscribeTopic {
-	return SubscribeTopic(Topic_Position_Linear)
+func GetTopicPosition(category string) SubscribeTopic {
+	switch category {
+	case "linear":
+		return SubscribeTopic(Topic_Position_Linear)
+	case "inverse":
+		return SubscribeTopic(Topic_Position_Inverse)
+	case "option":
+		return SubscribeTopic(Topic_Position_Option)
+
+	default:
+		return SubscribeTopic(Topic_Position)
+	}
 }
 
-func GetTopicOrderLinear() SubscribeTopic {
-	return SubscribeTopic(Topic_Order_Linear)
+func GetTopicOrder(category string) SubscribeTopic {
+	switch category {
+	case "spot":
+		return SubscribeTopic(Topic_Order_Spot)
+	case "linear":
+		return SubscribeTopic(Topic_Order_Linear)
+	case "inverse":
+		return SubscribeTopic(Topic_Order_Inverse)
+	case "option":
+		return SubscribeTopic(Topic_Order_Option)
+
+	default:
+		return SubscribeTopic(Topic_Order)
+	}
 }
