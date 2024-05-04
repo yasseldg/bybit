@@ -4,6 +4,7 @@ import (
 	"github.com/yasseldg/bybit/common"
 	"github.com/yasseldg/bybit/rest/errors"
 
+	"github.com/yasseldg/go-simple/logs/sLog"
 	"github.com/yasseldg/go-simple/types/sFloats"
 )
 
@@ -28,6 +29,10 @@ func NewAmendOrder(category, symbol, orderId string, prec int) (*AmendOrder, err
 		Order:   *order,
 		orderId: orderId,
 	}, nil
+}
+
+func (o *AmendOrder) Log() {
+	sLog.Info("AmendOrder: %v ", o.GetParams())
 }
 
 func (o *AmendOrder) Qty(qty float64) *AmendOrder {
