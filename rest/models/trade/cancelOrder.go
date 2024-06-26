@@ -13,21 +13,21 @@ type CancelOrder struct {
 	orderFilter *string
 }
 
-func NewCancelOrder(category, symbol, order_id string) (*CancelOrder, error) {
+func NewCancelOrder(category, symbol, orderId string) (*CancelOrder, error) {
 	if category == "" {
 		return nil, errors.ErrInvalidCategory
 	}
 	if symbol == "" {
 		return nil, errors.ErrInvalidSymbol
 	}
-	if order_id == "" {
+	if orderId == "" {
 		return nil, errors.ErrInvalidOrderId
 	}
 
 	return &CancelOrder{
 		category: category,
 		symbol:   symbol,
-		orderId:  order_id,
+		orderId:  orderId,
 	}, nil
 }
 
