@@ -21,8 +21,8 @@ type CancelOrderResponse struct {
 	Result response.OrderResult `json:"result"`
 }
 
-func NewCancelOrder(c *common.Client, category, symbol, order_id string) (*CancelOrder, error) {
-	orders, err := trade.NewCancelOrder(category, symbol, order_id)
+func NewCancelOrder(c *common.Client, category, symbol, orderId string) (*CancelOrder, error) {
+	orders, err := trade.NewCancelOrder(category, symbol, orderId)
 	if err != nil {
 		return nil, err
 	}

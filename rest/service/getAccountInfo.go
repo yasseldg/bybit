@@ -18,7 +18,7 @@ type GetAccountInfoResponse struct {
 	Result response.AccountInfo `json:"result"`
 }
 
-func NewGetAccountInfo(c *common.Client, hedging_mode string) (*GetAccountInfo, error) {
+func NewGetAccountInfo(c *common.Client) (*GetAccountInfo, error) {
 
 	request := new(common.Request).EndPoint("/v5/account/info").Get().Signed()
 

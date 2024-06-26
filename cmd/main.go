@@ -1,48 +1,105 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"os"
 	"time"
 
 	"github.com/yasseldg/bybit"
+	"github.com/yasseldg/bybit/common"
 	"github.com/yasseldg/bybit/constants"
 	"github.com/yasseldg/bybit/ws/model/wsPush"
 
+	"github.com/yasseldg/go-simple/logs/sLog"
+	"github.com/yasseldg/go-simple/types/sTime"
+
 	"github.com/yasseldg/simplego/sJson"
-	"github.com/yasseldg/simplego/sLog"
 )
 
 func main() {
-	t := time.Now()
-	sLog.Info("Cmd Main \n\n")
+	clean := sLog.SetByName(sLog.Zap, sLog.LevelInfo, "")
+	defer clean()
 
-	rest()
+	sLog.Info("Starting...")
+
+	sTime.TimeControl(rest, "Start")
+
+	// rest()
 
 	// web socket
 	// wss()
-
-	fmt.Println()
-	sLog.Info("Cmd Main: time: %d Segundos \n\n", time.Since(t)/time.Second)
 }
 
 func rest() {
 
 	os.Setenv("Serv_Bybit_API", "API_v5")
 
+	restInstrumentsInfos()
+	println()
+
+	rest := bybit.NewClient("", "", common.WithDebug(true))
+	rest.Log()
+
+	restGetApiKeyInfo(rest)
+	println()
+
+	restWalletBalance(rest)
+	println()
+}
+
+func restWalletBalance(rest *bybit.Rest) {
+
+	wallet, err := bybit.NewGetWalletBalance(rest.Client, "UNIFIED")
+	if err != nil {
+		sLog.Error("bybit.NewGetWalletBalance(): %s", err)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+	defer cancel()
+
+	resp, err := wallet.Do(ctx)
+	if err != nil {
+		sLog.Error("wallet.Do(): %s", err)
+		return
+	}
+
+	sLog.Info("WalletBalance: %+v", resp.Result)
+
+}
+
+func restGetApiKeyInfo(rest *bybit.Rest) {
+
+	info, err := bybit.NewGetApiKeyInfo(rest.Client)
+	if err != nil {
+		sLog.Error("bybit.NewGetApiKeyInfo(): %s", err)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+	defer cancel()
+
+	resp, err := info.Do(ctx)
+	if err != nil {
+		sLog.Error("info.Do(): %s", err)
+		return
+	}
+
+	sLog.Info("GetApiKeyInfo: %+v", resp.Result)
+}
+
+func restInstrumentsInfos() {
+
 	client := bybit.NewRestClient("Serv_Bybit_API", false)
 
-	instruments, err := client.InstrumentsInfos(constants.Category_Linear, constants.InstrumentStatus_Trading, "RSS3USDT")
+	instruments, err := client.InstrumentsInfos(constants.Category_Linear, constants.InstrumentStatus_Trading, "BTCUSDT")
 	if err != nil {
 		sLog.Error("client.InstrumentsInfos(): %s", err)
 		return
 	}
 
 	println()
-	sLog.Debug("InstrumentsInfos: %+v", instruments)
-
-	// url := "https://api-testnet.bybit.com/v5/market/instruments-info"
-	// method := "GET"
+	sLog.Info("InstrumentsInfos: %+v", instruments)
 }
 
 func wss() {
