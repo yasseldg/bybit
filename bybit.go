@@ -30,3 +30,11 @@ func NewCancelOrder(c *common.Client, category, symbol, orderId string) (*servic
 func NewGetOpenOrders(c *common.Client, category string) (*service.GetOpenOrders, error) {
 	return service.NewGetOpenOrders(c, category)
 }
+
+func NewGetApiKeyInfo(c *common.Client) (*service.GetAPIKeyInfo, error) {
+	return service.NewGetApiKeyInfo(c)
+}
+
+func NewGetWalletBalance(c *common.Client, accountType string) (*service.GetWalletBalance, error) {
+	return service.NewGetWalletBalance(c, accountType)
+}
