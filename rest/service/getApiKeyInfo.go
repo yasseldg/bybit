@@ -9,7 +9,7 @@ import (
 )
 
 type GetAPIKeyInfo struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 }
 
@@ -18,7 +18,7 @@ type GetAPIKeyInfoResponse struct {
 	Result response.UserAPIKeyInfo `json:"result"`
 }
 
-func NewGetApiKeyInfo(c *common.Client) (*GetAPIKeyInfo, error) {
+func NewGetApiKeyInfo(c common.InterClient) (*GetAPIKeyInfo, error) {
 
 	request := new(common.Request).EndPoint("/v5/user/query-api").Get().Signed()
 

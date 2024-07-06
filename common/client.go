@@ -17,6 +17,11 @@ import (
 	"github.com/yasseldg/bybit/utils"
 )
 
+type InterClient interface {
+	Log()
+	Call(ctx context.Context, r *Request, opts ...RequestOption) (data []byte, err error)
+}
+
 // Client define API client
 type Client struct {
 	*restConfig

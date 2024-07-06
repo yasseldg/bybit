@@ -10,7 +10,7 @@ import (
 )
 
 type GetPositionInfo struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*position.Position
@@ -21,7 +21,7 @@ type GetPositionInfoResponse struct {
 	Result response.PositionListInfo `json:"result"`
 }
 
-func NewGetPositionInfo(c *common.Client, category string) (*GetPositionInfo, error) {
+func NewGetPositionInfo(c common.InterClient, category string) (*GetPositionInfo, error) {
 	positions, err := position.NewPosition(category)
 	if err != nil {
 		return nil, err

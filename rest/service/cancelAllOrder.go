@@ -10,7 +10,7 @@ import (
 )
 
 type CancelAllOrders struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*trade.CancelAllOrders
@@ -21,7 +21,7 @@ type CancelAllOrdersResponse struct {
 	Result response.ListOrderResult `json:"result"`
 }
 
-func NewCancelAllOrders(c *common.Client, category string) (*CancelAllOrders, error) {
+func NewCancelAllOrders(c common.InterClient, category string) (*CancelAllOrders, error) {
 	orders, err := trade.NewCancelAllOrders(category)
 	if err != nil {
 		return nil, err
