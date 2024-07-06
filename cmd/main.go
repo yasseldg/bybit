@@ -23,22 +23,17 @@ func main() {
 	sLog.Info("Starting...")
 
 	sTime.TimeControl(rest, "Start")
-
-	// rest()
-
-	// web socket
-	// wss()
 }
 
 func rest() {
 
 	os.Setenv("Serv_Bybit_API", "API_v5")
 
-	restInstrumentsInfos()
-	println()
-
 	rest := bybit.NewClient("", "", common.WithDebug(true))
 	rest.Log()
+
+	restInstrumentsInfos(rest)
+	println()
 
 	restGetApiKeyInfo(rest)
 	println()
@@ -47,9 +42,9 @@ func rest() {
 	println()
 }
 
-func restWalletBalance(rest *bybit.Rest) {
+func restWalletBalance(rest bybit.InterRest) {
 
-	wallet, err := bybit.NewGetWalletBalance(rest.Client, "UNIFIED")
+	wallet, err := rest.NewGetWalletBalance("UNIFIED")
 	if err != nil {
 		sLog.Error("bybit.NewGetWalletBalance(): %s", err)
 		return
@@ -65,12 +60,11 @@ func restWalletBalance(rest *bybit.Rest) {
 	}
 
 	sLog.Info("WalletBalance: %+v", resp.Result)
-
 }
 
-func restGetApiKeyInfo(rest *bybit.Rest) {
+func restGetApiKeyInfo(rest bybit.InterRest) {
 
-	info, err := bybit.NewGetApiKeyInfo(rest.Client)
+	info, err := rest.NewGetApiKeyInfo()
 	if err != nil {
 		sLog.Error("bybit.NewGetApiKeyInfo(): %s", err)
 		return
@@ -88,18 +82,26 @@ func restGetApiKeyInfo(rest *bybit.Rest) {
 	sLog.Info("GetApiKeyInfo: %+v", resp.Result)
 }
 
-func restInstrumentsInfos() {
+func restInstrumentsInfos(rest bybit.InterRest) {
 
-	client := bybit.NewRestClient("Serv_Bybit_API", false)
-
-	instruments, err := client.InstrumentsInfos(constants.Category_Linear, constants.InstrumentStatus_Trading, "BTCUSDT")
+	instruments, err := rest.NewGetInstrumentsInfo(string(constants.Category_Linear))
 	if err != nil {
-		sLog.Error("client.InstrumentsInfos(): %s", err)
+		sLog.Error("bybit.NewGetInstrumentsInfo(): %s", err)
 		return
 	}
 
-	println()
-	sLog.Info("InstrumentsInfos: %+v", instruments)
+	instruments.Symbol("BTCUSDT")
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+	defer cancel()
+
+	resp, err := instruments.Do(ctx)
+	if err != nil {
+		sLog.Error("instruments.Do(): %s", err)
+		return
+	}
+
+	sLog.Info("InstrumentsInfos: %+v", resp.Result)
 }
 
 func wss() {
