@@ -10,7 +10,7 @@ import (
 )
 
 type GetWalletBalance struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*account.WalletBalance
@@ -21,7 +21,7 @@ type GetWalletBalanceResponse struct {
 	Result response.WalletBalanceInfo `json:"result"`
 }
 
-func NewGetWalletBalance(c *common.Client, accountType string) (*GetWalletBalance, error) {
+func NewGetWalletBalance(c common.InterClient, accountType string) (*GetWalletBalance, error) {
 	walletBalance, err := account.NewWalletBalance(accountType)
 	if err != nil {
 		return nil, err

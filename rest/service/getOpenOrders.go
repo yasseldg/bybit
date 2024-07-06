@@ -10,7 +10,7 @@ import (
 )
 
 type GetOpenOrders struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*trade.GetOpenOrders
@@ -21,7 +21,7 @@ type GetOpenOrdersResponse struct {
 	Result response.OpenOrdersInfo `json:"result"`
 }
 
-func NewGetOpenOrders(c *common.Client, category string) (*GetOpenOrders, error) {
+func NewGetOpenOrders(c common.InterClient, category string) (*GetOpenOrders, error) {
 	orders, err := trade.NewGetOpenOrders(category)
 	if err != nil {
 		return nil, err

@@ -10,7 +10,7 @@ import (
 )
 
 type PlaceOrder struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*trade.PlaceOrder
@@ -21,7 +21,7 @@ type PlaceOrderResponse struct {
 	Result response.OrderResult `json:"result"`
 }
 
-func NewPlaceOrder(c *common.Client, category, symbol, side, orderType string, qty float64, prec int) (*PlaceOrder, error) {
+func NewPlaceOrder(c common.InterClient, category, symbol, side, orderType string, qty float64, prec int) (*PlaceOrder, error) {
 	order, err := trade.NewPlaceOrder(category, symbol, side, orderType, qty, prec)
 	if err != nil {
 		return nil, err

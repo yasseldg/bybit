@@ -10,7 +10,7 @@ import (
 )
 
 type AmendOrder struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*trade.AmendOrder
@@ -21,7 +21,7 @@ type AmendOrderResponse struct {
 	Result response.OrderResult `json:"result"`
 }
 
-func NewAmendOrder(c *common.Client, category, symbol, orderId string, prec int) (*AmendOrder, error) {
+func NewAmendOrder(c common.InterClient, category, symbol, orderId string, prec int) (*AmendOrder, error) {
 	order, err := trade.NewAmendOrder(category, symbol, orderId, prec)
 	if err != nil {
 		return nil, err
