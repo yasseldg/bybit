@@ -25,6 +25,8 @@ type Order struct {
 	slTriggerBy  *string
 	tpLimitPrice *string
 	slLimitPrice *string
+	tpOrderType  *string
+	slOrderType  *string
 }
 
 func newOrder(category, symbol string, prec int) (*Order, error) {
@@ -117,6 +119,16 @@ func (o *Order) SlLimitPrice(price float64) *Order {
 	return o
 }
 
+func (o *Order) TpOrderType(orderType string) *Order {
+	o.tpOrderType = &orderType
+	return o
+}
+
+func (o *Order) SlOrderType(orderType string) *Order {
+	o.slOrderType = &orderType
+	return o
+}
+
 // Params returns the order parameters
 func (o *Order) getParams() common.Params {
 	cp := common.NewParams()
@@ -160,6 +172,12 @@ func (o *Order) getParams() common.Params {
 	}
 	if o.slLimitPrice != nil {
 		cp.Set("slLimitPrice", *o.slLimitPrice)
+	}
+	if o.tpOrderType != nil {
+		cp.Set("tpOrderType", *o.tpOrderType)
+	}
+	if o.slOrderType != nil {
+		cp.Set("slOrderType", *o.slOrderType)
 	}
 
 	return cp
