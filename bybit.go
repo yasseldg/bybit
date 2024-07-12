@@ -14,6 +14,7 @@ type InterRest interface {
 	NewGetApiKeyInfo() (*service.GetAPIKeyInfo, error)
 	NewGetWalletBalance(accountType string) (*service.GetWalletBalance, error)
 	NewGetInstrumentsInfo(category string) (*service.GetInstrumentsInfo, error)
+	NewGetAffiliateUserInfo(uid string) (*service.GetAffiliateUserInfo, error)
 }
 
 type Rest struct {
@@ -56,4 +57,8 @@ func (c Rest) NewCancelAllOrders(category string) (*service.CancelAllOrders, err
 
 func (c Rest) NewGetInstrumentsInfo(category string) (*service.GetInstrumentsInfo, error) {
 	return service.NewGetInstrumentsInfo(c.InterClient, category)
+}
+
+func (c Rest) NewGetAffiliateUserInfo(uid string) (*service.GetAffiliateUserInfo, error) {
+	return service.NewGetAffiliateUserInfo(c.InterClient, uid)
 }
