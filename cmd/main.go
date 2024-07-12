@@ -38,6 +38,9 @@ func rest() {
 	restGetApiKeyInfo(rest)
 	println()
 
+	restGetAffiliateUserInfo(rest)
+	println()
+
 	restWalletBalance(rest)
 	println()
 }
@@ -80,6 +83,26 @@ func restGetApiKeyInfo(rest bybit.InterRest) {
 	}
 
 	sLog.Info("GetApiKeyInfo: %+v", resp.Result)
+}
+
+func restGetAffiliateUserInfo(rest bybit.InterRest) {
+
+	info, err := rest.NewGetAffiliateUserInfo("18484197")
+	if err != nil {
+		sLog.Error("bybit.NewGetAffiliateUserInfo(): %s", err)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+	defer cancel()
+
+	resp, err := info.Do(ctx)
+	if err != nil {
+		sLog.Error("info.Do(): %s", err)
+		return
+	}
+
+	sLog.Info("GetAffiliateUserInfo: %+v", resp.Result)
 }
 
 func restInstrumentsInfos(rest bybit.InterRest) {
