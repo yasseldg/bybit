@@ -12,9 +12,9 @@ type BybitWsClient struct {
 	WsClient *common.WsClient
 }
 
-func NewWsClient(channel constants.Channel, needLogin bool) *BybitWsClient {
+func NewWsClient(channel constants.Channel, key, secret string) *BybitWsClient {
 	wsc := new(common.WsClient)
-	wsc.Init(channel, needLogin, func(message string) {
+	wsc.Init(channel, key, secret, func(message string) {
 		sLog.Debug("WebSocket message:" + message)
 	}, func(message string) {
 		sLog.Error(message)
@@ -23,23 +23,23 @@ func NewWsClient(channel constants.Channel, needLogin bool) *BybitWsClient {
 }
 
 func WscPublicSpot() *BybitWsClient {
-	return NewWsClient(constants.Channel_PublicSpot, false)
+	return NewWsClient(constants.Channel_PublicSpot, "", "")
 }
 
 func WscPublicLinear() *BybitWsClient {
-	return NewWsClient(constants.Channel_PublicLinear, false)
+	return NewWsClient(constants.Channel_PublicLinear, "", "")
 }
 
 func WscPublicInverse() *BybitWsClient {
-	return NewWsClient(constants.Channel_PublicInverse, false)
+	return NewWsClient(constants.Channel_PublicInverse, "", "")
 }
 
 func WscPublicOption() *BybitWsClient {
-	return NewWsClient(constants.Channel_PublicOption, false)
+	return NewWsClient(constants.Channel_PublicOption, "", "")
 }
 
-func WscPrivate() *BybitWsClient {
-	return NewWsClient(constants.Channel_Private, true)
+func WscPrivate(key, secret string) *BybitWsClient {
+	return NewWsClient(constants.Channel_Private, key, secret)
 }
 
 type UnsuscribeFunc func()

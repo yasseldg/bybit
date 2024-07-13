@@ -133,7 +133,7 @@ func (c *Client) parseRequest(r *Request, opts ...RequestOption) (err error) {
 	if r.secType == secTypeSigned {
 		timeStamp := utils.GetCurrentTime()
 		header.Set(signTypeKey, "2")
-		header.Set(apiRequestKey, c.ApiKey)
+		header.Set(apiRequestKey, c.InterApi.Key())
 		header.Set(timestampKey, strconv.FormatInt(timeStamp, 10))
 		if r.recvWindow == "" {
 			r.recvWindow = recvWindow
@@ -143,11 +143,11 @@ func (c *Client) parseRequest(r *Request, opts ...RequestOption) (err error) {
 		var signatureBase []byte
 		if r.method == "POST" {
 			header.Set("Content-Type", "application/json")
-			signatureBase = []byte(strconv.FormatInt(timeStamp, 10) + c.ApiKey + r.recvWindow + string(r.params[:]))
+			signatureBase = []byte(strconv.FormatInt(timeStamp, 10) + c.InterApi.Key() + r.recvWindow + string(r.params[:]))
 		} else {
-			signatureBase = []byte(strconv.FormatInt(timeStamp, 10) + c.ApiKey + r.recvWindow + queryString)
+			signatureBase = []byte(strconv.FormatInt(timeStamp, 10) + c.InterApi.Key() + r.recvWindow + queryString)
 		}
-		hmac256 := hmac.New(sha256.New, []byte(c.ApiSecret))
+		hmac256 := hmac.New(sha256.New, []byte(c.InterApi.Secret()))
 		hmac256.Write(signatureBase)
 		signature := hex.EncodeToString(hmac256.Sum(nil))
 		header.Set(signatureKey, signature)
