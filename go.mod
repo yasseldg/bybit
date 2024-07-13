@@ -7,7 +7,7 @@ require (
 	github.com/gorilla/websocket v1.5.0
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron v1.2.0
-	github.com/yasseldg/go-simple v0.1.3
+	github.com/yasseldg/go-simple v0.1.19
 	github.com/yasseldg/simplego v0.5.2
 )
 
