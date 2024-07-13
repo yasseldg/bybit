@@ -56,8 +56,6 @@ func (p *BaseWsClient) Init(channel constants.Channel, key, secret string) {
 	if constants.TimerIntervalSecond > 0 {
 		p.Ticker = time.NewTicker(constants.TimerIntervalSecond * time.Second)
 	}
-
-	sLog.Warn("WebSocket init: %s  ..  needLogin: %t", p.config.Url(), p.NeedLogin)
 }
 
 func (p *BaseWsClient) SetListener(msgListener OnReceive, errorListener OnReceive) {

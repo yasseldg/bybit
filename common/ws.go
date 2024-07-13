@@ -63,7 +63,6 @@ func (wc *wsConfig) GetAuth() (string, error) {
 
 	// Convert to hexadecimal instead of base64
 	signature := hex.EncodeToString(h.Sum(nil))
-	sLog.Warn("GetAuth signature: %s", signature)
 
 	authMessage := map[string]interface{}{
 		"req_id": uuid.New(),
