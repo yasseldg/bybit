@@ -10,9 +10,9 @@ type WsClient struct {
 	BaseWsClient *BaseWsClient
 }
 
-func (wsc *WsClient) Init(channel constants.Channel, needLogin bool, listener OnReceive, errorListener OnReceive) {
+func (wsc *WsClient) Init(channel constants.Channel, key, secret string, listener OnReceive, errorListener OnReceive) {
 	wsc.BaseWsClient = new(BaseWsClient)
-	wsc.BaseWsClient.Init(channel, needLogin)
+	wsc.BaseWsClient.Init(channel, key, secret)
 	wsc.BaseWsClient.SetListener(listener, errorListener)
 	wsc.BaseWsClient.ConnectWebSocket()
 	wsc.BaseWsClient.StartReadLoop()

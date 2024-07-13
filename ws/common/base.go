@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/yasseldg/bybit/common"
-	"github.com/yasseldg/bybit/config"
 	"github.com/yasseldg/bybit/constants"
 	"github.com/yasseldg/bybit/ws/model"
 	"github.com/yasseldg/bybit/ws/model/wsRequest"
@@ -20,6 +19,8 @@ import (
 )
 
 type BaseWsClient struct {
+	config common.InterWsConfig
+
 	NeedLogin        bool
 	Connection       bool
 	LoginStatus      bool
@@ -37,14 +38,17 @@ type BaseWsClient struct {
 
 type OnReceive func(message string)
 
-func (p *BaseWsClient) Init(channel constants.Channel, needLogin bool) {
-	creds := config.GetDefaultCredentials()
+func (p *BaseWsClient) Init(channel constants.Channel, key, secret string) {
+	p.config = common.GetWsConfig(key, secret)
+
+	if len(p.config.Key()) > 0 {
+		p.NeedLogin = true
+	}
 
 	p.Channel = channel
-	p.NeedLogin = needLogin
 	p.Connection = false
 	p.AllSubscribe = model.NewSet()
-	p.Signer = new(Signer).Init(creds.SecretKey)
+	p.Signer = new(Signer).Init(p.config.Secret())
 	p.ListenerMap = make(map[constants.SubscribeTopic]OnReceive)
 	p.SendMutex = &sync.Mutex{}
 	p.LastReceivedTime = time.Now()
@@ -52,6 +56,8 @@ func (p *BaseWsClient) Init(channel constants.Channel, needLogin bool) {
 	if constants.TimerIntervalSecond > 0 {
 		p.Ticker = time.NewTicker(constants.TimerIntervalSecond * time.Second)
 	}
+
+	sLog.Warn("WebSocket init: %s  ..  needLogin: %t", p.config.Url(), p.NeedLogin)
 }
 
 func (p *BaseWsClient) SetListener(msgListener OnReceive, errorListener OnReceive) {
@@ -66,9 +72,10 @@ func (p *BaseWsClient) Connect() {
 
 func (p *BaseWsClient) ConnectWebSocket() {
 	var err error
-	sLog.Info("WebSocket connecting ...")
 
-	url := fmt.Sprintf("%s/%s", config.Url_Wss, p.Channel)
+	url := fmt.Sprintf("%s/%s", p.config.Url(), p.Channel)
+
+	sLog.Info("WebSocket connecting ... %s", url)
 
 	p.WebSocketClient, _, err = websocket.DefaultDialer.Dial(url, nil)
 	if err != nil {
@@ -106,8 +113,7 @@ func (p *BaseWsClient) Login() {
 }
 
 func (p *BaseWsClient) login() {
-	config := common.GetWsConfig("", "")
-	auth, err := config.GetAuth()
+	auth, err := p.config.GetAuth()
 	if err != nil {
 		sLog.Error("WebSocket login error: %s", err)
 		return
