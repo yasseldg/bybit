@@ -15,6 +15,8 @@ type InterRest interface {
 	NewGetWalletBalance(accountType string) (*service.GetWalletBalance, error)
 	NewGetInstrumentsInfo(category string) (*service.GetInstrumentsInfo, error)
 	NewGetAffiliateUserInfo(uid string) (*service.GetAffiliateUserInfo, error)
+	NewSetSpotHedging(hedging_mode bool) (*service.SetSpotHedging, error)
+	NewSwitchPositionMode(category string) (*service.SwitchPositionMode, error)
 }
 
 type Rest struct {
@@ -61,4 +63,12 @@ func (c Rest) NewGetInstrumentsInfo(category string) (*service.GetInstrumentsInf
 
 func (c Rest) NewGetAffiliateUserInfo(uid string) (*service.GetAffiliateUserInfo, error) {
 	return service.NewGetAffiliateUserInfo(c.InterClient, uid)
+}
+
+func (c Rest) NewSetSpotHedging(hedging_mode bool) (*service.SetSpotHedging, error) {
+	return service.NewSetSpotHedging(c.InterClient, hedging_mode)
+}
+
+func (c Rest) NewSwitchPositionMode(category string) (*service.SwitchPositionMode, error) {
+	return service.NewSwitchPositionMode(c.InterClient, category)
 }

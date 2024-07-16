@@ -2,20 +2,21 @@ package account
 
 import (
 	"github.com/yasseldg/bybit/common"
-	"github.com/yasseldg/bybit/rest/errors"
 )
 
 type HedgingMode struct {
 	setHedgingMode string
 }
 
-func NewHedgingMode(hedging_mode string) (*HedgingMode, error) {
-	if hedging_mode != "ON" && hedging_mode != "OFF" {
-		return nil, errors.ErrHedgingMode
+func NewHedgingMode(hedging_mode bool) (*HedgingMode, error) {
+
+	setHedgingMode := "OFF"
+	if hedging_mode {
+		setHedgingMode = "ON"
 	}
 
 	return &HedgingMode{
-		setHedgingMode: hedging_mode,
+		setHedgingMode: setHedgingMode,
 	}, nil
 }
 

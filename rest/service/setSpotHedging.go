@@ -9,7 +9,7 @@ import (
 )
 
 type SetSpotHedging struct {
-	c *common.Client
+	c common.InterClient
 	r *common.Request
 
 	*account.HedgingMode
@@ -19,7 +19,7 @@ type SetSpotHedgingResponse struct {
 	common.RetResponse
 }
 
-func NewSetSpotHedging(c *common.Client, hedging_mode string) (*SetSpotHedging, error) {
+func NewSetSpotHedging(c common.InterClient, hedging_mode bool) (*SetSpotHedging, error) {
 	hedgingMode, err := account.NewHedgingMode(hedging_mode)
 	if err != nil {
 		return nil, err
