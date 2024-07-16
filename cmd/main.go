@@ -32,17 +32,62 @@ func rest() {
 	rest := bybit.NewClient("", "", common.WithDebug(true))
 	rest.Log()
 
-	restInstrumentsInfos(rest)
+	restSwitchPositionMode(rest)
 	println()
 
-	restGetApiKeyInfo(rest)
-	println()
+	// restInstrumentsInfos(rest)
+	// println()
 
-	restGetAffiliateUserInfo(rest)
-	println()
+	// restGetApiKeyInfo(rest)
+	// println()
 
-	restWalletBalance(rest)
-	println()
+	// restGetAffiliateUserInfo(rest)
+	// println()
+
+	// restWalletBalance(rest)
+	// println()
+}
+
+func restSetSpotHedging(rest bybit.InterRest) {
+
+	hedging, err := rest.NewSetSpotHedging(true)
+	if err != nil {
+		sLog.Error("bybit.NewSetSpotHedging(): %s", err)
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+	defer cancel()
+
+	resp, err := hedging.Do(ctx)
+	if err != nil {
+		sLog.Error("hedging.Do(): %s", err)
+		return
+	}
+
+	sLog.Info("Response: %+v", resp)
+}
+
+func restSwitchPositionMode(rest bybit.InterRest) {
+
+	positionMode, err := rest.NewSwitchPositionMode(string(constants.Category_Linear))
+	if err != nil {
+		sLog.Error("bybit.NewSwitchPositionMode(): %s", err)
+		return
+	}
+
+	positionMode.Coin("USDT").Mode(3)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+	defer cancel()
+
+	resp, err := positionMode.Do(ctx)
+	if err != nil {
+		sLog.Error("positionMode.Do(): %s", err)
+		return
+	}
+
+	sLog.Info("Response: %+v", resp)
 }
 
 func restWalletBalance(rest bybit.InterRest) {
