@@ -14,12 +14,16 @@ type BybitWsClient struct {
 
 func NewWsClient(channel constants.Channel, key, secret string) *BybitWsClient {
 	wsc := new(common.WsClient)
-	wsc.Init(channel, key, secret, func(message string) {
-		sLog.Debug("WebSocket message:" + message)
-	}, func(message string) {
-		sLog.Error(message)
-	})
+	wsc.Init(channel, key, secret, listener, errorListener)
 	return &BybitWsClient{wsc}
+}
+
+func listener(message string) {
+	sLog.Debug("WebSocket message:" + message)
+}
+
+func errorListener(message string) {
+	sLog.Error(message)
 }
 
 func WscPublicSpot() *BybitWsClient {
