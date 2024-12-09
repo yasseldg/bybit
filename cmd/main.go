@@ -8,6 +8,7 @@ import (
 	"github.com/yasseldg/bybit"
 	"github.com/yasseldg/bybit/common"
 	"github.com/yasseldg/bybit/constants"
+	"github.com/yasseldg/bybit/rest/service"
 	"github.com/yasseldg/bybit/ws/model/wsPush"
 
 	"github.com/yasseldg/go-simple/logs/sLog"
@@ -32,8 +33,8 @@ func rest() {
 	rest := bybit.NewClient("", "", common.WithDebug(true))
 	rest.Log()
 
-	restSwitchPositionMode(rest)
-	println()
+	// restSwitchPositionMode(rest)
+	// println()
 
 	// restInstrumentsInfos(rest)
 	// println()
@@ -43,6 +44,9 @@ func rest() {
 
 	// restGetAffiliateUserInfo(rest)
 	// println()
+
+	restGetAffiliateUserList(rest)
+	println()
 
 	// restWalletBalance(rest)
 	// println()
@@ -130,24 +134,71 @@ func restGetApiKeyInfo(rest bybit.InterRest) {
 	sLog.Info("GetApiKeyInfo: %+v", resp.Result)
 }
 
-func restGetAffiliateUserInfo(rest bybit.InterRest) {
+func restGetAffiliateUserList(rest bybit.InterRest) {
 
-	info, err := rest.NewGetAffiliateUserInfo("18484197")
+	list, err := rest.NewGetAffiliateUserList()
 	if err != nil {
-		sLog.Error("bybit.NewGetAffiliateUserInfo(): %s", err)
+		sLog.Error("bybit.NewGetAffiliateUserList(): %s", err)
 		return
 	}
+
+	list.SetSize(100)
+
+	for {
+		cursor := listAffiliated(list) //  comment for test
+
+		if cursor == "" {
+			break
+		}
+
+		list.SetCursor(cursor)
+	}
+}
+
+func listAffiliated(list *service.GetAffiliateUserList) string {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
 	defer cancel()
 
-	resp, err := info.Do(ctx)
+	resp, err := list.Do(ctx)
 	if err != nil {
-		sLog.Error("info.Do(): %s", err)
-		return
+		sLog.Error("list.Do(): %s", err)
+		return ""
 	}
 
-	sLog.Info("GetAffiliateUserInfo: %+v", resp.Result)
+	for _, user := range resp.Result.List {
+		sLog.Info("Affiliated: %+v", user)
+	}
+
+	return resp.Result.NextPageCursor
+}
+
+func restGetAffiliateUserInfo(rest bybit.InterRest) {
+
+	uids := []string{"18404197", "29072848"}
+
+	for _, uid := range uids {
+
+		info, err := rest.NewGetAffiliateUserInfo(uid)
+		if err != nil {
+			sLog.Error("bybit.NewGetAffiliateUserInfo(): %s", err)
+			continue
+		}
+
+		ctx, cancel := context.WithTimeout(context.Background(), time.Duration(15)*time.Second)
+		defer cancel()
+
+		resp, err := info.Do(ctx)
+		if err != nil {
+			sLog.Error("info.Do(): %s", err)
+			continue
+		}
+
+		sLog.Info("GetAffiliateUserInfo: %+v", resp.Result)
+
+		println()
+		time.Sleep(1 * time.Second)
+	}
 }
 
 func restInstrumentsInfos(rest bybit.InterRest) {
