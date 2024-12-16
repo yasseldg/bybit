@@ -3,7 +3,6 @@ package response
 // UserVolumeInfo represents the structure for a user's trading and deposit volume information.
 type UserVolumeInfo struct {
 	UID                 string `json:"uid"`
-	VipLevel            string `json:"vipLevel"`
 	TakerVol30Day       string `json:"takerVol30Day"`
 	MakerVol30Day       string `json:"makerVol30Day"`
 	TradeVol30Day       string `json:"tradeVol30Day"`
@@ -14,6 +13,7 @@ type UserVolumeInfo struct {
 	DepositAmount365Day string `json:"depositAmount365Day"`
 	TotalWalletBalance  string `json:"totalWalletBalance"` // This should be an integer value representing a range, not a string.
 	DepositUpdateTime   string `json:"depositUpdateTime"`
+	VipLevel            string `json:"vipLevel"`
 	VolUpdateTime       string `json:"volUpdateTime"`
 }
 
@@ -44,18 +44,6 @@ type UserAPIKeyInfo struct {
 }
 
 type AffiliateUserInfo struct {
-	UID                 string `json:"uid"`
-	TakerVol30Day       string `json:"takerVol30Day"`
-	MakerVol30Day       string `json:"makerVol30Day"`
-	TradeVol30Day       string `json:"tradeVol30Day"`
-	DepositAmount30Day  string `json:"depositAmount30Day"`
-	TakerVol365Day      string `json:"takerVol365Day"`
-	MakerVol365Day      string `json:"makerVol365Day"`
-	TradeVol365Day      string `json:"tradeVol365Day"`
-	DepositAmount365Day string `json:"depositAmount365Day"`
-	TotalWalletBalance  string `json:"totalWalletBalance"` // This should be an integer value representing a range, not a string.
-	DepositUpdateTime   string `json:"depositUpdateTime"`
-	VipLevel            string `json:"vipLevel"`
-	VolUpdateTime       string `json:"volUpdateTime"`
-	KycLevel            int    `json:"KycLevel"`
+	UserVolumeInfo
+	KycLevel int `json:"KycLevel"`
 }
