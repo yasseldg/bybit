@@ -6,7 +6,9 @@ import (
 
 type Url string
 
-var Url_Wss, Url_Rest Url
+var (
+	Url_Wss, Url_Rest Url
+)
 
 func init() {
 	Url_Wss = Url_Base_Wss
