@@ -23,7 +23,7 @@ func main() {
 
 	sLog.Info("Starting...")
 
-	sTime.TimeControl(rest, "Start")
+	sTime.TimeControl(wssLinear, "Start")
 }
 
 func rest() {
@@ -256,8 +256,34 @@ func wssLinear() {
 	uFunc_tr2 := wsc.SubscribeTickers(listTickers, constants.Symbol_BTCUSDT)
 	defer uFunc_tr2()
 
+	go setWorkers(wsc)
+
 	forever := make(chan struct{})
 	<-forever
+}
+
+func setWorkers(wsc *bybit.BybitWsClient) {
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(10)
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(20)
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(10)
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(30)
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(10)
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(40)
+
+	time.Sleep(5 * time.Second)
+	wsc.SetWorkers(10)
 }
 
 func wssInverse() {
@@ -303,7 +329,7 @@ func listCandle(msg string) {
 	// sLog.Debug("Topic: %s  ..  Type: %s  ..  TimeStamp: %d", pushObj.Topic, pushObj.Type, pushObj.TimeStamp)
 
 	for _, data := range pushObj.Data {
-		sLog.Debug("%s: %+v ", pushObj.Topic, data)
+		sLog.Warn("%s: %+v ", pushObj.Topic, data)
 	}
 }
 
