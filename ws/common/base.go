@@ -34,8 +34,9 @@ type BaseWsClient struct {
 	Signer           *Signer
 	ListenerMap      map[constants.SubscribeTopic]OnReceive
 
+	workers *workerPool
+
 	messageChannel chan []byte
-	workerCount    int
 }
 
 type OnReceive func(message string)
@@ -56,11 +57,16 @@ func (p *BaseWsClient) Init(channel constants.Channel, key, secret string) {
 	p.LastReceivedTime = time.Now()
 
 	p.messageChannel = make(chan []byte, 1000)
-	p.workerCount = 40
+
+	p.workers = newWorkerPool(40, p.messageChannel, p.processMessage)
 
 	if constants.TimerIntervalSecond > 0 {
 		p.Ticker = time.NewTicker(constants.TimerIntervalSecond * time.Second)
 	}
+}
+
+func (p *BaseWsClient) SetWorkers(count int) {
+	p.workers.Scale(count)
 }
 
 func (p *BaseWsClient) SetListener(msgListener OnReceive, errorListener OnReceive) {
@@ -128,12 +134,7 @@ func (p *BaseWsClient) login() {
 func (p *BaseWsClient) StartReadLoop() {
 	go p.readLoop() // Ejecutar el bucle de lectura en una goroutine
 
-	// Inicializar el worker pool
-	for i := 0; i < p.workerCount; i++ {
-		go p.worker()
-	}
-
-	sLog.Info("WebSocket ReadLoop started with %d workers", p.workerCount)
+	p.workers.Start() // Iniciar los workers
 }
 
 func (p *BaseWsClient) StartTickerLoop() {
@@ -230,75 +231,6 @@ func (p *BaseWsClient) DisconnectWebSocket() {
 
 	sLog.Info("WebSocket disconnected")
 }
-
-// func (p *BaseWsClient) readLoop() {
-// 	for {
-// 		if p.WebSocketClient == nil {
-// 			sLog.Warn("WebSocket Read error: no connection available")
-// 			time.Sleep(time.Second)
-// 			continue
-// 		}
-
-// 		_, buf, err := p.WebSocketClient.ReadMessage()
-// 		if err != nil {
-// 			sLog.Warn("WebSocket Read error: %s", err)
-// 			time.Sleep(time.Second)
-// 			continue
-// 		}
-
-// 		p.LastReceivedTime = time.Now()
-
-// 		var jsonMap map[string]interface{}
-
-// 		err = json.Unmarshal(buf, &jsonMap)
-// 		if err != nil {
-// 			sLog.Warn("WebSocket Read error: json.Unmarshal: %s", err)
-// 			continue
-// 		}
-
-// 		v, e := jsonMap["op"]
-// 		if e && v.(string) == constants.WsOpPong {
-// 			sLog.Debug("WebSocket keep connected %s", constants.WsOpPong)
-// 			continue
-// 		}
-
-// 		if e && v.(string) == constants.WsOpPing {
-// 			v, e := jsonMap["success"]
-// 			if e && v.(bool) {
-// 				sLog.Debug("WebSocket keep connected %s", constants.WsOpPing)
-// 				continue
-// 			}
-// 		}
-
-// 		if e && v.(string) == constants.WsOpAuth {
-// 			v, e := jsonMap["success"]
-// 			if e && v.(bool) {
-// 				sLog.Info("WebSocket login success")
-// 				p.LoginStatus = true
-// 				continue
-// 			}
-
-// 			msg := ""
-// 			v, e = jsonMap["ret_msg"]
-// 			if e {
-// 				msg = v.(string)
-// 			}
-// 			sLog.Error("WebSocket login failed: %s", msg)
-// 			continue
-// 		}
-
-// 		message := string(buf)
-
-// 		v, e = jsonMap["topic"]
-// 		if e {
-// 			listener := p.GetListener(constants.SubscribeTopic(v.(string)))
-
-// 			listener(message)
-// 			continue
-// 		}
-// 		p.handleMessage(message)
-// 	}
-// }
 
 func (p *BaseWsClient) GetListener(topic constants.SubscribeTopic) OnReceive {
 	v, e := p.ListenerMap[topic]

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/yasseldg/bybit/constants"
+
 	"github.com/yasseldg/go-simple/logs/sLog"
 )
 
@@ -28,13 +29,6 @@ func (p *BaseWsClient) readLoop() {
 
 		// Enviar el mensaje al canal para ser procesado por un worker
 		p.messageChannel <- buf
-	}
-}
-
-// Worker para procesar mensajes de forma concurrente
-func (p *BaseWsClient) worker() {
-	for message := range p.messageChannel {
-		p.processMessage(message)
 	}
 }
 
