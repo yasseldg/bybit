@@ -72,3 +72,7 @@ func (bws *BybitWsClient) SubscribeTickers(listener common.OnReceive, symbol con
 func (bws *BybitWsClient) SubscribeLiquidation(listener common.OnReceive, symbol constants.Symbol) UnsuscribeFunc {
 	return bws.Subscribe(listener, constants.GetTopicLiquidation(symbol))
 }
+
+func (bws *BybitWsClient) SetWorkers(count int) {
+	bws.WsClient.SetWorkers(count)
+}
