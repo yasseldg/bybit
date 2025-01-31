@@ -21,6 +21,10 @@ func (wsc *WsClient) Init(channel constants.Channel, key, secret string, listene
 	wsc.BaseWsClient.Login()
 }
 
+func (wsc *WsClient) SetWorkers(count int) {
+	wsc.BaseWsClient.SetWorkers(count)
+}
+
 func (wsc *WsClient) UnSubscribe(list []constants.SubscribeTopic) {
 
 	var args []interface{}
