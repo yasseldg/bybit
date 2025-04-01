@@ -1,12 +1,15 @@
 package common
 
 import (
+	"sync"
+
 	"github.com/yasseldg/bybit/ws/model/wsRequest"
 
 	"github.com/yasseldg/bybit/constants"
 )
 
 type WsClient struct {
+	mu           sync.Mutex
 	BaseWsClient *BaseWsClient
 }
 
@@ -22,18 +25,22 @@ func (wsc *WsClient) Init(channel constants.Channel, key, secret string, listene
 }
 
 func (wsc *WsClient) SetWorkers(count int) {
+	wsc.mu.Lock()
+	defer wsc.mu.Unlock()
+
 	wsc.BaseWsClient.SetWorkers(count)
 }
 
 func (wsc *WsClient) UnSubscribe(list []constants.SubscribeTopic) {
-
-	var args []interface{}
+	wsc.mu.Lock()
+	var args []any
 	for _, req := range list {
 		delete(wsc.BaseWsClient.ListenerMap, req)
 		wsc.BaseWsClient.AllSubscribe.Add(req)
 		wsc.BaseWsClient.AllSubscribe.Remove(req)
 		args = append(args, req)
 	}
+	wsc.mu.Unlock()
 
 	wsBaseReq := wsRequest.Base{
 		Op:   constants.WsOpUnsubscribe,
@@ -44,11 +51,13 @@ func (wsc *WsClient) UnSubscribe(list []constants.SubscribeTopic) {
 }
 
 func (wsc *WsClient) SubscribeDef(list []constants.SubscribeTopic) {
-
-	var args []interface{}
+	wsc.mu.Lock()
+	var args []any
 	for _, req := range list {
 		args = append(args, req)
 	}
+	wsc.mu.Unlock()
+
 	wsBaseReq := wsRequest.Base{
 		Op:   constants.WsOpSubscribe,
 		Args: args,
@@ -57,14 +66,16 @@ func (wsc *WsClient) SubscribeDef(list []constants.SubscribeTopic) {
 }
 
 func (wsc *WsClient) Subscribe(list []constants.SubscribeTopic, listener OnReceive) {
-
-	var args []interface{}
+	wsc.mu.Lock()
+	var args []any
 	for _, req := range list {
 		args = append(args, req)
 
 		wsc.BaseWsClient.ListenerMap[req] = listener
 		wsc.BaseWsClient.AllSubscribe.Add(req)
 	}
+	wsc.mu.Unlock()
+
 	wsBaseReq := wsRequest.Base{
 		Op:   constants.WsOpSubscribe,
 		Args: args,
@@ -73,5 +84,8 @@ func (wsc *WsClient) Subscribe(list []constants.SubscribeTopic, listener OnRecei
 }
 
 func (wsc *WsClient) Close() {
+	wsc.mu.Lock()
+	defer wsc.mu.Unlock()
+
 	wsc.BaseWsClient.DisconnectWebSocket()
 }
